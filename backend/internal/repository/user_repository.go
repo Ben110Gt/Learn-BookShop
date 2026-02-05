@@ -22,9 +22,9 @@ func (r *UserRepository) CreateUser(ctx context.Context, u *user.User) error {
 	return r.db.QueryRow(ctx, query, u.UserName, u.Email, u.Password, u.Role).Scan(&u.ID, &u.CreatedAt, &u.UpdatedAt)
 }
 func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*user.User, error) {
-	query := `SELECT id,user_name,email,password,role,created_at,updated_at FROM users WHERE email=$1 AND deleted_at IS NULL`
+	query := `SELECT id,user_id,user_name,email,password,role,created_at,updated_at FROM users WHERE email=$1 AND deleted_at IS NULL`
 	u := &user.User{}
-	err := r.db.QueryRow(ctx, query, email).Scan(&u.ID, &u.UserName, &u.Email, &u.Password, &u.Role, &u.CreatedAt, &u.UpdatedAt)
+	err := r.db.QueryRow(ctx, query, email).Scan(&u.ID, &u.UserID, &u.UserName, &u.Email, &u.Password, &u.Role, &u.CreatedAt, &u.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*use
 
 // Query GetUserByID
 func (r *UserRepository) GetUserByID(ctx context.Context, id string) (*user.User, error) {
-	query := `SELECT id,user_name,email,role,created_at,updated_at FROM users WHERE id=$1 AND deleted_at IS NULL`
+	query := `SELECT user_id,user_name,email,role,created_at,updated_at FROM users WHERE id=$1 AND deleted_at IS NULL`
 	u := &user.User{}
 	err := r.db.QueryRow(ctx, query, id).Scan(&u.ID, &u.UserName, &u.Email, &u.Role, &u.CreatedAt, &u.UpdatedAt)
 	if err != nil {
@@ -44,7 +44,7 @@ func (r *UserRepository) GetUserByID(ctx context.Context, id string) (*user.User
 
 // Query GetAllUser
 func (r *UserRepository) GetAllUser(ctx context.Context) ([]*user.User, error) {
-	query := `SELECT id,user_name,email,role,created_at,updated_at FROM users WHERE deleted_at IS NULL ORDER BY id DESC`
+	query := `SELECT id,user_id,user_name,email,role,created_at,updated_at FROM users WHERE deleted_at IS NULL ORDER BY id DESC`
 	rows, err := r.db.Query(ctx, query)
 	if err != nil {
 		return nil, err

@@ -28,18 +28,18 @@ func (s *UserService) Register(ctx context.Context, req user.RegisterRequest) (*
 		UserName: req.UserName,
 		Email:    req.Email,
 		Password: hash,
-		Role:     "user",
+		Role:     "customer",
 	}
 
-	// 1️⃣ insert → ได้ ID
+
 	if err := s.repo.CreateUser(ctx, u); err != nil {
 		return nil, err
 	}
 
-	// 2️⃣ format code
+
 	u.UserID = util.FormatUserID(u.ID)
 
-	// 3️⃣ update code
+
 	if err := s.repo.UpdateUser(ctx, u); err != nil {
 		return nil, err
 	}

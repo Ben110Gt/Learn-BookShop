@@ -14,16 +14,16 @@ func Use5Routes(app *fiber.App) {
 	configs.ConnectPGX()
 	db := configs.GetPGX()
 
-	userRepo := repository.NewUserRepository(db)         // PGX or GORM
-	userService := service.NewUserService(userRepo)      // Service Layer
+	userRepo := repository.NewUserRepository(db)    // PGX or GORM
+	userService := service.NewUserService(userRepo) // Service Layer
 	userHandler := handlers.NewUserHandler(userService)
 
-	auth := app.Group("/BookShop")
+	auth := app.Group("/")
 	auth.Use(middlewares.JWTMiddleware())
 
 	// User
-	user := auth.Group("/user")
-	user.Use(middlewares.RoleMiddleware("user"))
+	user := auth.Group("/customer")
+	user.Use(middlewares.RoleMiddleware("customer"))
 	user.Get("/profile", userHandler.GetProfile)
 	// Admin
 	admin := auth.Group("/admin")

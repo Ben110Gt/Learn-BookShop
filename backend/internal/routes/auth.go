@@ -19,7 +19,7 @@ func AuthRoutes(app *fiber.App) {
 	userHandler := handlers.NewAuthHandler(userService)
 
 	// --- Public Routes ---
-	api := app.Group("/api")
+	api := app.Group("BookShop/auth")
 	api.Post("/register", userHandler.Register)
 	api.Post("/login", userHandler.Login)
 }

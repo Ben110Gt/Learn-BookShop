@@ -48,13 +48,20 @@ func ConnectDatabase() {
 		panic("failed to connect database")
 	}
 
-	// Migrate the schema
-	err = db.AutoMigrate(&User.User{}, &book.Category{}, &book.Book{})
+	err = db.AutoMigrate(&User.User{})
 	if err != nil {
-		panic("failed to migrate database")
+		panic("failed to migrate User")
 	}
 
-	DB = db
+	err = db.AutoMigrate(&book.Category{})
+	if err != nil {
+		panic("failed to migrate Category")
+	}
+
+	err = db.AutoMigrate(&book.Book{})
+	if err != nil {
+		panic("failed to migrate Book")
+	}
 
 }
 func GetDB() *gorm.DB {
