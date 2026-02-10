@@ -10,16 +10,16 @@ import (
 )
 
 func AuthRoutes(app *fiber.App) {
-	configs.ConnectPGX()
+	configs.ConnectDatabase()
 
-	db := configs.GetPGX()
+	db := configs.GetDB()
 
-	userRepo := repository.NewUserRepository(db)    // PGX or GORM
-	userService := service.NewUserService(userRepo) // Service Layer
+	userRepo := repository.NewUserRepository(db)
+	userService := service.NewUserService(userRepo)
 	userHandler := handlers.NewAuthHandler(userService)
 
 	// --- Public Routes ---
 	api := app.Group("BookShop/auth")
-	api.Post("/register", userHandler.Register)
-	api.Post("/login", userHandler.Login)
+	api.Post("/register", userHandler.Register) //✅
+	api.Post("/login", userHandler.Login)       //✅
 }

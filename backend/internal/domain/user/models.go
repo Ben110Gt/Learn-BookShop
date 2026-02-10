@@ -7,8 +7,7 @@ import (
 )
 
 type User struct {
-	ID        uint           `gorm:"primaryKey" json:"id"`
-	UserID    string         `gorm:"uniqueIndex" json:"user_id"`
+	UserID    string         `json:"user_id" gorm:"primaryKey;column:user_id"`
 	UserName  string         `json:"user_name"`
 	Email     string         `gorm:"uniqueIndex" json:"email"`
 	Password  string         `json:"-"`    // ไม่ส่งรหัสผ่านให้ client

@@ -4,10 +4,9 @@ import (
 	"context"
 )
 
-type Repository interface {
-	CreateBook(ctx context.Context, book *Book) (*Book, error)
+type Service interface {
+	CreateBook(ctx context.Context, req *CreateBookRequest) (*Book, error)
 	GetBookByID(ctx context.Context, id string) (*Book, error)
-	GetBookByTitle(ctx context.Context, title string) (*Book, error)
 	GetAllBooks(ctx context.Context) ([]*Book, error)
 	UpdateBook(ctx context.Context, book *Book) (*Book, error)
 	DeleteBook(ctx context.Context, id string) error

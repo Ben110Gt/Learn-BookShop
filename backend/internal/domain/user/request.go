@@ -18,6 +18,8 @@ type UpdateRequest struct {
 }
 
 type LoginResponse struct {
+	ID       uint   `json:"id"`
+	UserID   string `json:"user_id"`
 	Token    string `json:"token"`
 	Username string `json:"username"`
 	Role     string `json:"role"`
@@ -30,3 +32,4 @@ type UserResponse struct {
 	Email    string `json:"email"`
 	Role     string `json:"role"`
 }
+

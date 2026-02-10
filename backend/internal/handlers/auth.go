@@ -28,6 +28,7 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
+
 	return c.Status(201).JSON(u)
 
 }
@@ -46,7 +47,14 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
-	return c.Status(200).JSON(res)
+	LoginResponse := &user.LoginResponse{
+		Token:    res.Token,
+		UserID:   res.UserID,
+		Username: res.Username,
+		Role:     res.Role,
+	}
+	return c.Status(200).JSON(LoginResponse)
+
 }
 
 // GetProfile

@@ -63,6 +63,7 @@ func ConnectDatabase() {
 		panic("failed to migrate Book")
 	}
 
+	DB = db
 }
 func GetDB() *gorm.DB {
 	return DB

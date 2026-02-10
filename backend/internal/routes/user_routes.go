@@ -11,11 +11,11 @@ import (
 )
 
 func Use5Routes(app *fiber.App) {
-	configs.ConnectPGX()
-	db := configs.GetPGX()
+	configs.ConnectDatabase()
+	db := configs.GetDB()
 
-	userRepo := repository.NewUserRepository(db)    // PGX or GORM
-	userService := service.NewUserService(userRepo) // Service Layer
+	userRepo := repository.NewUserRepository(db)
+	userService := service.NewUserService(userRepo)
 	userHandler := handlers.NewUserHandler(userService)
 
 	auth := app.Group("/")
@@ -28,8 +28,9 @@ func Use5Routes(app *fiber.App) {
 	// Admin
 	admin := auth.Group("/admin")
 	admin.Use(middlewares.RoleMiddleware("admin"))
-	admin.Get("/users", userHandler.GetAllUsers)
-	admin.Delete("/user/:id", userHandler.DeleteUser)
-	admin.Put("/user/:id", userHandler.UpdateUser)
+	admin.Get("/users", userHandler.GetAllUsers)           //✅
+	admin.Delete("/user/:user_id", userHandler.DeleteUser) // ✅
+	admin.Put("/user/:user_id", userHandler.UpdateUser)
+	admin.Get("/user/:user_id", userHandler.GetUserByID) // ✅
 
 }

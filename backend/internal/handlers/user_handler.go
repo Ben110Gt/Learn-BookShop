@@ -46,13 +46,13 @@ func (h *UserHandler) GetAllUsers(c *fiber.Ctx) error {
 
 // DeleteUser
 func (h *UserHandler) DeleteUser(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
-	if err != nil {
+	id := c.Params("user_id")
+	if id == "" {
 		return c.Status(400).JSON(fiber.Map{
 			"error": "invalid user ID",
 		})
 	}
-	err = h.service.DeleteUser(c.Context(), strconv.Itoa(id))
+	err := h.service.DeleteUser(c.Context(), id)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"error": err.Error(),
@@ -86,4 +86,21 @@ func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{
 		"message": "User updated successfully",
 	})
+}
+
+// GetUserByID
+func (h *UserHandler) GetUserByID(c *fiber.Ctx) error {
+	id := c.Params("user_id")
+	if id == "" {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "invalid user ID",
+		})
+	}
+	user, err := h.service.GetUserByID(c.Context(), id)
+	if err != nil {
+		return c.Status(404).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+	return c.Status(200).JSON(user)
 }
