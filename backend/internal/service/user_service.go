@@ -1,7 +1,6 @@
 package service
 
 import (
-	"book/shop/internal/configs"
 	"book/shop/internal/domain/user"
 	"book/shop/internal/util"
 	"context"
@@ -22,14 +21,16 @@ func (s *UserService) Register(ctx context.Context, req user.RegisterRequest) (*
 	if existing != nil {
 		return nil, errors.New("email already exists")
 	}
-
-	hash, _ := util.HashPassword(req.Password)
-	newID, err := util.GenerateID("U", configs.GetDB(), &user.User{}, "user_id")
+	count, err := s.repo.Count(ctx)
 	if err != nil {
 		return nil, err
 	}
+
+	hash, _ := util.HashPassword(req.Password)
+	code := util.GenerateCode("U", count)
+
 	u := &user.User{
-		UserID:   newID,
+		UserCode: code,
 		UserName: req.UserName,
 		Email:    req.Email,
 		Password: hash,
@@ -52,7 +53,7 @@ func (s *UserService) Login(ctx context.Context, req user.LoginRequest) (user.Lo
 	if err != nil {
 		return user.LoginResponse{}, errors.New("invalid email or password")
 	}
-	token, err := util.GenerateToken(u.UserID, u.UserName, u.Role)
+	token, err := util.GenerateToken(u.UserCode, u.UserName, u.Role)
 	if err != nil {
 		return user.LoginResponse{}, errors.New("failed to generate token")
 	}

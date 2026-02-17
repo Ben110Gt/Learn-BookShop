@@ -15,11 +15,15 @@ func NewBookRepository(db *gorm.DB) book.Repository {
 	return &BookRepository{db: db}
 }
 
-func (r *BookRepository) CreateBook(ctx context.Context, book *book.Book) (*book.Book, error) {
+func (r *BookRepository) CreateBook(ctx context.Context, book *book.Book) error {
 	if err := r.db.WithContext(ctx).Create(book).Error; err != nil {
-		return nil, err
+		return err
 	}
-	return book, nil
+	if err := r.db.WithContext(ctx).Preload("Category").First(book, "id = ?", book.ID).Error; err != nil {
+		return err
+	}
+	return nil
+
 }
 
 func (r *BookRepository) GetBookByID(ctx context.Context, id string) (*book.Book, error) {
@@ -43,6 +47,10 @@ func (r *BookRepository) GetAllBooks(ctx context.Context) ([]*book.Book, error) 
 	if err := r.db.WithContext(ctx).Find(&books).Error; err != nil {
 		return nil, err
 	}
+	if err := r.db.WithContext(ctx).Preload("Category").Find(&books).Error; err != nil {
+		return nil, err
+	}
+
 	return books, nil
 }
 
@@ -58,4 +66,10 @@ func (r *BookRepository) DeleteBook(ctx context.Context, id string) error {
 		return err
 	}
 	return nil
+}
+
+func (r *BookRepository) Count(ctx context.Context) (int64, error) {
+	var count int64
+	err := r.db.WithContext(ctx).Model(&book.Book{}).Count(&count).Error
+	return count, err
 }

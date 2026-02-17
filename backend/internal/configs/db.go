@@ -2,6 +2,7 @@ package configs
 
 import (
 	"book/shop/internal/domain/book"
+	"book/shop/internal/domain/category"
 	User "book/shop/internal/domain/user"
 	"fmt"
 	"log"
@@ -53,7 +54,7 @@ func ConnectDatabase() {
 		panic("failed to migrate User")
 	}
 
-	err = db.AutoMigrate(&book.Category{})
+	err = db.AutoMigrate(&category.Category{})
 	if err != nil {
 		panic("failed to migrate Category")
 	}

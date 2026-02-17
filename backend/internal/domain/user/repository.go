@@ -13,4 +13,7 @@ type Repository interface {
 
 	// Auth Support
 	GetUserByEmail(ctx context.Context, email string) (*User, error)
+
+	// Count total users (for ID generation)
+	Count(ctx context.Context) (int64, error)
 }

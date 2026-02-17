@@ -28,6 +28,7 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
+	u.Password = ""
 
 	return c.Status(201).JSON(u)
 

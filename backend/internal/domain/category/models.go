@@ -1,0 +1,17 @@
+package category
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
+
+type Category struct {
+	ID         uuid.UUID      `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
+	CategoryID string         `gorm:"uniqueIndex" json:"category_id"`
+	Name       string         `gorm:"uniqueIndex;not null" json:"name"`
+	CreatedAt  time.Time      `gorm:"not null;default:now()" json:"created_at"`
+	UpdatedAt  time.Time      `gorm:"not null;default:now()" json:"updated_at"`
+	DeletedAt  gorm.DeletedAt `gorm:"index" json:"-"`
+}

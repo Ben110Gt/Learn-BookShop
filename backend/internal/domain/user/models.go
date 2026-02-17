@@ -3,11 +3,13 @@ package user
 import (
 	"time"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type User struct {
-	UserID    string         `json:"user_id" gorm:"primaryKey;column:user_id"`
+	ID        uuid.UUID      `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
+	UserCode  string         `gorm:"size:10;uniqueIndex"`
 	UserName  string         `json:"user_name"`
 	Email     string         `gorm:"uniqueIndex" json:"email"`
 	Password  string         `json:"-"`    // ไม่ส่งรหัสผ่านให้ client

@@ -60,3 +60,9 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*use
 	}
 	return &user, nil
 }
+
+func (r *UserRepository) Count(ctx context.Context) (int64, error) {
+	var count int64
+	err := r.db.WithContext(ctx).Model(&user.User{}).Count(&count).Error
+	return count, err
+}

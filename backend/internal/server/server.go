@@ -22,6 +22,7 @@ func Server() {
 	routes.AuthRoutes(app)
 	routes.Use5Routes(app)
 	routes.BookRoutes(app)
+	routes.CategoryRoutes(app)
 
 	port := os.Getenv("APP_PORT")
 
